@@ -1,6 +1,7 @@
 import React from 'react';
 // eslint-disable-next-line no-restricted-imports
 import {findByTestID, mountWithAppProvider} from 'test-utilities/legacy';
+import {mountWithApp} from 'test-utilities';
 import {Link} from 'components';
 
 import {Tooltip} from '../Tooltip';
@@ -63,5 +64,32 @@ describe('<Tooltip />', () => {
   it('unrenders its children on mouseLeave', () => {
     wrapperComponent.simulate('mouseLeave');
     expect(findByTestID(tooltip, 'TooltipOverlayLabel').exists()).toBe(false);
+  });
+
+  it('passes role="tool" to the activator wrapper', () => {
+    const accessibilityLabel = 'accessibility label';
+    const tooltip = mountWithApp(
+      <Tooltip
+        accessibilityLabel={accessibilityLabel}
+        activatorWrapper="button"
+        content="content"
+      >
+        Content
+      </Tooltip>,
+    );
+
+    expect(tooltip).toContainReactComponent('button', {
+      'aria-label': accessibilityLabel,
+    });
+  });
+
+  it('passes accessibility label to the activator wrapper', () => {
+    const tooltip = mountWithApp(
+      <Tooltip activatorWrapper="button" content="content">
+        Content
+      </Tooltip>,
+    );
+
+    expect(tooltip).toContainReactComponent('button', {role: 'tooltip'});
   });
 });

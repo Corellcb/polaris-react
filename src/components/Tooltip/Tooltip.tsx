@@ -29,6 +29,8 @@ export interface TooltipProps {
    * @default 'span'
    */
   activatorWrapper?: string;
+  /** Visually hidden text for screen readers */
+  accessibilityLabel?: string;
 }
 
 export function Tooltip({
@@ -39,6 +41,7 @@ export function Tooltip({
   active: originalActive,
   preferredPosition = 'below',
   activatorWrapper = 'span',
+  accessibilityLabel,
 }: TooltipProps) {
   const WrapperComponent: any = activatorWrapper;
   const {value: active, setTrue: handleFocus, setFalse: handleBlur} = useToggle(
@@ -88,6 +91,8 @@ export function Tooltip({
       onMouseLeave={handleMouseLeave}
       onMouseOver={handleMouseEnterFix}
       ref={setActivator}
+      role="tooltip"
+      aria-label={accessibilityLabel}
     >
       {children}
       {portal}
